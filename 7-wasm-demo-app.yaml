@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wasm-spin
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wasm-spin
+  template:
+    metadata:
+      labels:
+        app: wasm-spin
+    spec:
+      containers:
+      - image: depecheio/tech-meetup-wasm-go-example:v1
+        imagePullPolicy: Always
+        name: spin-hello
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "1.0"
+          limits:
+            memory: "4Gi"
+            cpu: "2.0"
+      runtimeClassName: wasmtime-spin
+
