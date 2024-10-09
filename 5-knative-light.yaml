@@ -1,0 +1,50 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: kn-light-nginx
+  namespace: default
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/target: "1"
+    spec:
+      containers:
+      - image: nginx:1.23-alpine
+        ports:
+        - containerPort: 80
+
+
+
+---
+apiVersion: node.k8s.io/v1
+handler: spin
+kind: RuntimeClass
+metadata:
+  name: wasmtime-spin
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wasm-spin
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wasm-spin
+  template:
+    metadata:
+      labels:
+        app: wasm-spin
+    spec:
+      containers:
+      - image: ghcr.io/depecheio/spin-rust-hello
+        name: spin-hello
+      runtimeClassName: wasmtime-spin
+
+
+

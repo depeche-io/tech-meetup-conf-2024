@@ -1,0 +1,18 @@
+spin_version = "1"
+authors = ["Fermyon Engineering <engineering@fermyon.com>"]
+name = "spin-teavm-example"
+trigger = { type = "http", base = "/" }
+version = "1.0.0"
+
+[[component]]
+id = "spin_http"
+source = "target/generated/wasm/teavm-wasm/classes.wasm"
+allowed_http_hosts = [ "https://raw.githubusercontent.com" ]
+environment = { URL = "https://raw.githubusercontent.com/dicej/dicej/master/jabberwocky.txt" }
+files = [{ source = "static-assets/", destination = "/" }]
+
+[component.trigger]
+route = "/..."
+
+[component.build]
+command = "mvn prepare-package"
